@@ -1,11 +1,11 @@
 
 clear;clc;
-ts = 0 : 150;   % 时间
+ts = 0 : 250;   % 时间
 
 x0=[0.000001];   % 最初感染率，百万分之一
 
 % lambda   日接触率
-lambdas = [0.3, 0.15, 0.07, 0.05, 0.025, 0.0125];   
+lambdas = [0.15, 0.07, 0.05, 0.025, 0.0125];   
 infective_matrix = zeros(length(ts),length(lambdas));
 
 for i = 1 : length(lambdas)
