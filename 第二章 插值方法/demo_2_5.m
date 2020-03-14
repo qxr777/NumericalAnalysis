@@ -2,7 +2,7 @@
 clear; clc;
 f = inline('1./(1+x.^2)','x');
 a = -5; b = 5;
-xi = -5: 0.01 :5;
+xi = a: 0.01 :b;
 yt = f(xi);
 
 for n = 2  : 10
