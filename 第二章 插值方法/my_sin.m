@@ -1,7 +1,7 @@
 function [ y ] = my_sin( x )
 %MY_SIN 以插值方法实现正弦函数
 %   Detailed explanation goes here
-b = pi * (0 : 0.5 : 3) / 6;
+b = pi * (0 : 1 : 3) / 6;
 yb = sin(b);
 [m, c] = d_d(b, yb);
 s = 1;
