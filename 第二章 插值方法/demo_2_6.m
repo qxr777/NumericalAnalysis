@@ -1,4 +1,4 @@
-% 线性插值和三次Hermite插值
+% 线性插值和三次Hermite插值（单段）
 clear; clc; close all;
 f = @(x) 1./(1+x.^2); % 函数表达式
 df = @(x) -(2*x)./(x.^2 + 1).^2; % 一阶导数, 用于Hermite插值
