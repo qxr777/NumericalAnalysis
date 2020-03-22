@@ -18,7 +18,8 @@ while(0 == 0)
         continue;
     end
     x = xl : 0.01 : xr;          % 待插值点，绘制曲线的横坐标   
-    pp = spline(xlist, [0, ylist, 0]);  % 自然三次样条
+    pp = spline(xlist, [0, ylist, 0]);  % 第一类边界条件
+    %pp = spline(xlist, ylist);  % not a knot三次样条
     y = ppval(pp, x);                   % 计算待插值点的纵坐标    
     plot(xlist, ylist, 'o', x, y, [xl xr], [0 0], 'k', [0 0], [yb yt], 'k');   
     title('自然三次样条插值演示');
