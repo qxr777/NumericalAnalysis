@@ -7,4 +7,5 @@ C = [x.^0, x.^1, x.^2];
 A = C' * C;
 b = C' * y;
 
-a = inv(A)*b
+%a = inv(A)*b
+a = A \ b;

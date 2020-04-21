@@ -27,6 +27,6 @@ RMSE_3 = sqrt(sum((y - C * p_3).^2)) / sqrt(length(C))
 %% 开始预测
 x1=x(end) + (1:5)';   % 待预测时间, 10年
 xi=[x;x1];
-p = p_3;   % 指定模型
+p = p_1;   % 指定模型
 plot(x + year,y,'*',xi + year,polyval(flip(p),xi),x1 + year,polyval(flip(p),x1),'rp');
 % 结论：预测结果仅供参考
