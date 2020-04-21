@@ -3,7 +3,7 @@ clear; clc;
 f = @(x) sqrt(x.^3);
 a = 0; 
 b = 1;
-tol = 1e-10;
+tol = 1e-7;
 maxit = 100; % 最大迭代步数
 
 T(1,1) = (b-a)/2 * (f(a) + f(b));  
@@ -22,6 +22,6 @@ for k = 1 : maxit
     fprintf('\n')
     if (err<tol), break, end % check convergence
 end
-% fprintf('I[f]=%.8f\n',double(int('sqrt(x^3)',a,b)));
+
 
 

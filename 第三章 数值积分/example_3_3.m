@@ -4,7 +4,7 @@ format long;
 f = @(x) sin(x)./x; % 采用数组运算，使得函数可以作用在向量或矩阵上
 a = 0; 
 b = 1;
-tol = 1e-6;
+tol = 1e-7;
 i = 0;
 
 h = b - a;
@@ -12,7 +12,7 @@ T1 = (h / 2) * (1 + f(b));
 T2 = 0;
 flag = true;
 while (flag)
-    fprintf('T%d= %.8f\n', 2^i, T1);
+    fprintf('T%d= %.10f\n', 2^i, T1);
     S = 0;
     x = a + h / 2;
     while (x < b)
