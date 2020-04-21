@@ -4,8 +4,8 @@ format long;
 tol = 1e-10;
 N = 100;
 x0 = 0.5;
-%phi = @(x) exp(-x);
-phi = @(x) (x+1)^(1/3);
+phi = @(x) exp(-x);
+%phi = @(x) (x+1)^(1/3);
 
 for k = 1 : N
     x1 = phi(x0);

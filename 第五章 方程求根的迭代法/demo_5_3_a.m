@@ -7,7 +7,9 @@ f = @(x) x.^3 - x -1;
 
 x=linspace(-2,2,300);
 y=f(x);
-plot(x,y);
+
+[y0,i]=sort(abs(y));    % 排序，i是排序后元素的序号
+plot(x,y,x(i(1)),y0(1),'rp');
 ha=gca;
 set(ha,'ygrid','on')
 
