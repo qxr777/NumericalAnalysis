@@ -1,6 +1,6 @@
 
 clear;clc;
-ts = 0 : 250;   % 时间
+ts = 0 : 550;   % 时间
 
 x0=[0.000001];   % 最初感染率，百万分之一
 
@@ -16,4 +16,5 @@ end
 
 plot(t, infective_matrix);
 legend(num2str(lambdas(1)), num2str(lambdas(2)), num2str(lambdas(3)), num2str(lambdas(4)), num2str(lambdas(5)));
+title('SI模型');
 grid;

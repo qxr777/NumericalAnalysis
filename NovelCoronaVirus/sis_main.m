@@ -22,4 +22,5 @@ end
 
 plot(t, infective_matrix);
 legend(num2str(lambda_miu(1,:)), num2str(lambda_miu(2,:)), num2str(lambda_miu(3,:)), num2str(lambda_miu(4,:)), num2str(lambda_miu(5,:)));
+title('SIS模型');
 grid;

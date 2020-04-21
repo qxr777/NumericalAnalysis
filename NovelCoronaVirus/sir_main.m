@@ -9,3 +9,4 @@ x0=[0.02,0.98];
 plot(t, x(:, 1),t, x(:, 2), t, (1 - x(:,1) - x(:, 2)));
 legend('Infective', 'Suspectable', 'Removed');
 grid;
+title('SIR模型');
