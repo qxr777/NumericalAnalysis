@@ -20,7 +20,12 @@ function [L,U,pv,qv] = lugui(A,pivotstrat)
 %   triangular U and permutation vectors p and q so that L*U = A(p,q).
 %
 %   See also PIVOTGOLF.
+
+%   Copyright 2014 Cleve Moler
+%   Copyright 2014 The MathWorks, Inc.
+
 % Initialize
+
 if nargin < 2
    pivotstrat = 'pick';
 end
@@ -29,28 +34,38 @@ if nargin < 1
    A = golub(n);
 end
 Asave = A;
+
 [m,n] = size(A);
 shg
 clf
-dx = 100;
+dx = 120;
 dy = 30;
 warns = warning('off','MATLAB:divideByZero');
-set(gcf,'double','on','name','LU Gui', ...
-   'menu','none','numbertitle','off','color','white', ...
-   'pos',[480-(dx/2)*min(9,n) 320 (n+1)*dx (m+3)*dy], ...
+set(gcf,'name','Lugui','menu','none','numbertitle','off', ...
    'windowbuttonupfcn','set(gcf,''tag'',''pivot'')')
-stop = uicontrol('style','toggle','string','X','fontweight','bold', ...
-   'back','w','pos',[(n+1)*dx-25 (m+3)*dy-25 25 25]);
-axes('pos',[0 0 1 1])
-axis off
+w = (n+1)*dx;
+h = (m+3)*dy;
+pos = get(gcf,'pos');
+if pos(3) < w+40
+   pos = [pos(1)-(w+40-pos(3))/2 pos(2) w+40 pos(4)];
+end
+if pos(4) < h+80
+   pos = [pos(1) pos(2)-(h+80-pos(4))/2 pos(3) h+80];
+end
+set(gcf,'pos',pos)
+axes('units','pixels','pos',[(pos(3)-w)/2 (pos(4)-h)/2 w h], ...
+   'xtick',[],'ytick',[])
+box on
 Lcolor = [0 .65 0];
 Ucolor = [0  0 .90];
 Acolor = [0 0 0];
 PartialPivotColor = [1 0 1];
 PivotColor = [1 0 0];
-TempColor = [1 1 1];
+ElimColor = [1 1 0];
 paws = 0.02;
+
 % Each element has its own handle
+
 for j = 1:n
    for i = 1:m
       t(i,j) = text('units','pixels','string',spf(A(i,j)), ...
@@ -60,7 +75,9 @@ for j = 1:n
          'buttondownfcn','set(gcf,''userdata'',get(gco,''userdata''))');
    end
 end
+
 % Menus
+
 switch lower(pivotstrat)
    case 'pick', val = 1;
    case 'diagonal', val = 2;
@@ -68,14 +85,22 @@ switch lower(pivotstrat)
    case 'complete', val = 4;
    otherwise, val = 1;
 end
-pivotstrat = uicontrol('pos',[60+(dx/2)*(n-2) 20 180 20],'style','pop', ...
-   'val',val,'fontsize',12,'back','white','string',{'Pick a pivot', ...
-   'Diagonal pivoting','Partial pivoting','Complete pivoting'});
+pos = get(gca,'pos');
+pivotstrat = uicontrol('pos',[pos(1)+pos(3)/2-75 pos(2)-35 150 20], ...
+   'style','pop','val',val,'fontsize',12,'back','white', ...
+   'string',{'Pick a pivot','Diagonal pivoting', ...
+   'Partial pivoting','Complete pivoting'});
+quit = uicontrol('style','toggle','string','quit','fontsize',12, ...
+   'back','w','pos',[pos(1)+pos(3)-60 pos(2)-40 60 25],'vis','off');
+
 % Elimination
+
 pv = 1:m;
 qv = 1:n;
 for k = 1:min(m,n)
+
 %  If possible, quit early
+
    if all(all(A(k:m,k:n)==0)) | all(all(~isfinite(A(k:m,k:n))))
       for l = k:min(m,n)
          for i = l+1:m
@@ -89,6 +114,7 @@ for k = 1:min(m,n)
       end
       break
    end
+
    if (m == n) & (k == n)
       p = n;
       q = n;
@@ -107,7 +133,7 @@ for k = 1:min(m,n)
                   q = pq(2);
                   set(gcf,'tag','','userdata',[])
                else
-                  drawnow
+                  pause(paws)
                end
    
             case 2 % Diagonal pivoting
@@ -123,15 +149,17 @@ for k = 1:min(m,n)
                p = p(1)+k-1;
                q = q(1)+k-1;
          end
-         if get(stop,'value') == 1, break, end
+         if get(quit,'value') == 1, break, end
       end
-      if get(stop,'value') == 1, break, end
+      if get(quit,'value') == 1, break, end
       set(t(pp,k),'color',Acolor)
       set(t(p,q),'color',PivotColor)
    end
-   if get(stop,'value') == 1, break, end
+   if get(quit,'value') == 1, break, end
    pause(10*paws)
+
 %  Swap columns
+
    A(:,[q,k]) = A(:,[k,q]);
    qv([q,k]) = qv([k,q]);
    for s = .05:.05:1
@@ -147,7 +175,9 @@ for k = 1:min(m,n)
       set(t(i,q),'string',spf(A(i,q)),'userdata',[i q])
    end
    pause(10*paws)
+
 %  Swap rows
+
    A([p,k],:) = A([k,p],:);
    pv([p,k]) = pv([k,p]);
    for s = .05:.05:1
@@ -159,12 +189,15 @@ for k = 1:min(m,n)
    end
    t([p,k],:) = t([k,p],:);
    pause(10*paws)
+
    for j = k:n
       set(t(k,j),'string',spf(A(k,j)),'userdata',[k j])
       set(t(p,j),'string',spf(A(p,j)),'userdata',[p j])
    end
    pause(10*paws)
+
 %  Skip step if column is all zero
+
    if all(A(k:m,k) == 0)
       for i = k+1:m
          set(t(i,k),'string',spf(A(i,k)),'color',Lcolor)
@@ -175,25 +208,27 @@ for k = 1:min(m,n)
          drawnow
       end
    else
+
 %     Compute multipliers in L
+
       for i = k+1:m
          A(i,k) = A(i,k)/A(k,k);
          set(t(i,k),'string',spf(A(i,k)),'color',Lcolor)
          pause(paws)
-         drawnow
       end
+
 %     Elimination    
+
       for j = k+1:n
          for i = k+1:m
-            set(t(i,j),'color',TempColor)
-            drawnow
+            set(t(i,j),'color',ElimColor)
             pause(paws)
             A(i,j) = A(i,j) - A(i,k)*A(k,j);
-            set(t(i,j),'string',spf(A(i,j)),'color',Acolor)
-            drawnow
             pause(paws)
+            set(t(i,j),'string',spf(A(i,j)),'color',Acolor)
          end
       end
+
       for j = k:n
          set(t(k,j),'string',spf(A(k,j)),'color',Ucolor)
          drawnow
@@ -202,8 +237,11 @@ for k = 1:min(m,n)
    end
    if k < min(m,n), pause(10*paws), end
 end
+
 % Seperate L and U into two matrices
+
 delete(pivotstrat)
+
 for s = .1:.1:1.5
    for j = 1:n
       for i = 1:m
@@ -216,6 +254,7 @@ for s = .1:.1:1.5
    end
    drawnow
 end
+
 % Insert ones on diagonal of L
  
 r = min(m,n);
@@ -227,16 +266,19 @@ for j = 1:r
 end
 drawnow
 warning(warns)
+
 if nargout > 0
    L = tril(A(:,1:r),-1) + eye(m,r);
    U = triu(A(1:r,:));
 else
    set(gcf,'userdata',Asave)
-   set(stop,'value',0,'callback','close(gcf)')
-   uicontrol('pos',[(n+1)*dx-70 10 60 20],'string','repeat', ...
-      'back','w','fontsize',12,'callback','lugui(get(gcf,''userdata''))')
+   set(quit,'value',0,'string','close','fontsize',12,'callback','close(gcf)')
+   uicontrol('pos',[pos(1)+pos(3)/2-30 pos(2)-40 80 25],'string','repeat', ...
+      'back','w','fontsize',12,'callback','lugui(get(gcf,''userdata''))','vis','off')
 end
+
 %------------------------------------------------------------
+
 function s = spf(aij)
 % Subfunction to format text strings
 if aij == 0

@@ -3,10 +3,10 @@ clear;
 format long;
 tol = 1e-5;
 N = 100;
-x0 = 0.6;
+x0 = 0.5;
 lamda = 1;
 f = @(x) x^3 - x - 1;  %f(x)表达式
-df = @(x) 3*x^2 - 1;
+df = @(x) 3*x^2 - 1;    %f'(x)表达式
 fprintf('f(x)的初值: %d\n', abs(f(x0)));
 for k = 1 : N
     x1 = x0 - f(x0)/ df(x0);
@@ -22,6 +22,7 @@ for k = 1 : N
         break;
     end
     x0 = x1;
+    lamda = 1;
 end
 if k == N
     fprintf('迭代方法失败\n');

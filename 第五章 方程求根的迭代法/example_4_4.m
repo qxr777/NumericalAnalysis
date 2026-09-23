@@ -1,11 +1,11 @@
 % 埃特金方法加速迭代方法求解方程
 clear;
 format long;
-tol = 1e-10;
+tol = 1e-7;
 N = 100;
 x0 = 0.5;
-phi = @(x) exp(-x);
-%phi = @(x) (x+1)^(1/3);
+%phi = @(x) exp(-x);
+phi = @(x) (x+1)^(1/3);
 
 for k = 1 : N
     x1 = phi(x0);

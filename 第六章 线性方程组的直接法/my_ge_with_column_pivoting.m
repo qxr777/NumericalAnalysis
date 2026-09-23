@@ -1,4 +1,4 @@
-%  高斯消去法
+%  列主元高斯消去法
 function [x] = my_ge_with_column_pivoting(A, b)
 
 [m,n]=size(A);

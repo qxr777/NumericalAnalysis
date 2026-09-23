@@ -15,7 +15,7 @@ for n = 1 : 5
    X = 0 : h : 1;
    Y = f(X);
    Y(1) = 1;  %  y(1)=0/sin(0)
-   I(n) = sum(Ck{n} .* Y);
+   I(n) = (b-a)*sum(Ck{n} .* Y);
 end
 I    % 1阶到5阶Newton-Cotes求积结果
 Im = quad(f, 0, 1)  % matlab求积函数
